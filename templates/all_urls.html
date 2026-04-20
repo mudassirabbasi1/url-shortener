@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}All Links — SnipURL{% endblock %}
+
+{% block content %}
+<h4 class="fw-bold mb-4">All shortened links</h4>
+
+{% if urls %}
+<div class="table-responsive">
+  <table class="table table-hover align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>Short code</th>
+        <th>Original URL</th>
+        <th class="text-center">Clicks</th>
+        <th>Created</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for url in urls %}
+      <tr>
+        <td>
+          <a href="{{ url_for('redirect_url', short_code=url.short_code) }}"
+             target="_blank" class="fw-bold text-decoration-none">
+            {{ url.short_code }}
+          </a>
+        </td>
+        <td class="text-muted text-truncate" style="max-width: 280px;">
+          {{ url.original_url }}
+        </td>
+        <td class="text-center">
+          <span class="badge bg-primary rounded-pill">{{ url.clicks }}</span>
+        </td>
+        <td class="text-muted small">{{ url.created_at.strftime('%d %b %Y') }}</td>
+        <td>
+          <a href="{{ url_for('analytics', short_code=url.short_code) }}"
+             class="btn btn-sm btn-outline-secondary">Stats</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="text-center py-5 text-muted">
+  <p>No links yet. <a href="{{ url_for('index') }}">Shorten your first URL →</a></p>
+</div>
+{% endif %}
+{% endblock %}
